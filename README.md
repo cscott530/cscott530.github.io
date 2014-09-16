@@ -1,4 +1,5 @@
 cscott530.github.io
 ===================
 
-Github pages repo
+[Github pages](//cscott530.github.io) repo
+
