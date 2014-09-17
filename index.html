@@ -1,11 +1,18 @@
 <html>
 <head>
 	<title>Chris Scott</title>
+	<link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="style.css">
 </head>
-<body>
-	Presentations
+<body ng-app="cscott530">
+	<a href="presentations/ef6">Entity Framework Presentation</a>
 
-	<ul>
-		<a href="ef6-codefirst.html">Entity Framework, Code-First Migrations</a>
-	</ul>
+	<div ng-view>
+
+	</div>
+
+	<script src="bower_components/jquery/dist/jquery.min.js"></script>
+	<script src="bower_components/angular/angular.min.js"></script>
+	<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src="app.js"></script>
 </body>
