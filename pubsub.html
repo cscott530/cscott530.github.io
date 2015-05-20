@@ -146,8 +146,60 @@ MessageHub.Hub.Subscribe&lt;BadgeCompletedEvent&gt;(e =&gt;
 						<p>It ruins the "not touching core code" if we have to manually call all of these different RegisterForEvents methods<p>
 					</section>
 					<section>
-						<h2>Custom Attributes to the Rescue!</h2>
-						
+						<section>
+							<h2>Custom Attributes to the Rescue!</h2>
+							<pre><code data-trim class="csharp">
+[AttributeUsage(AttributeTargets.Class)]
+public class ManagerAttribute : Attribute
+{
+}
+							</code></pre>
+							<p>This is a custom attribute, that will be written as [Manager] that gets added at the class level</p>
+						</section>
+						<section>
+							<h2>Add to our Managers</h2>
+							<pre><code data-trim class="csharp">
+public interface IManager
+{
+    void Startup();
+}
+							</code></pre>
+							<p>All of our managers will implement this interface, which gives us a handle on starting them up.</p>
+							<pre><code data-trim class="csharp">
+[Manager]
+public class EmailManager : IManager
+{
+    public void Startup()
+    {
+        MessageHub.Hub.Subscribe<SampleBadgeCompleted>(e =>
+        {
+        });
+		
+		//etc
+    }
+}
+							</code></pre>							
+						</section>
+						<section>
+							<h2>Auto-register on Application_Start</h2>
+							<pre><code data-trim class="csharp">
+foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+{
+    foreach (var type in assembly.GetTypes())
+    {
+        if (type.GetCustomAttributes(typeof(ManagerAttribute), true).Length > 0)
+        {
+            //do this as a blind cast. if it fails the app should hard crash, anyway.
+            var manager = (IManager) Activator.CreateInstance(type);
+            manager.Startup();
+        }
+    }
+}
+							</code></pre>
+							<p>This gets all of the types in the system with the [Manager] attribute</p>
+							<p>Then calls .Startup()</p>
+							<p>Adding new managers now no longer requires ANY modification of the core classes.</p>
+						</section>
 					</section>
 				</section>
 				
