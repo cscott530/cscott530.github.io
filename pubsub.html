@@ -74,22 +74,27 @@
 						<li>???</li>
 						<li>Profit</li>
 					</ol>
+					
+					<p>ALL of these require modifying the ProcessingEngine code to do additional activities</p>
+					<p>Too many different people have worked on this, there is not enough documentation for this to be maintainable</p>
 				</section>
 				
 				<section>
-					<h2>As PubSub</h2>
-					<p>Complete badge:</p>
-					<pre><code data-trim class="csharp">
+					<section>
+						<h2>As PubSub</h2>
+						<p>Complete badge:</p>
+						<pre><code data-trim class="csharp">
 //user completes step
 MessageHub.Hub.Publish(new BadgeCompletedEvent
 {
     Step = completedStep,
     User = user
 });
-					</code></pre>
-					
-					<p>Handle it!</p>
-					<pre><code data-trim class="csharp">
+						</code></pre>
+					</section>
+					<section>
+						<p>Handle it!</p>
+						<pre><code data-trim class="csharp">
 //email manager
 MessageHub.Hub.Subscribe&lt;BadgeCompletedEvent&gt;(e =&gt;
 {
@@ -102,7 +107,8 @@ MessageHub.Hub.Subscribe&lt;BadgeCompletedEvent&gt;(e =&gt;
 {
     db.Notifications.Add(new Notification(e.User.Mentor, e.User, e.Step));
 });
-					</code></pre>
+						</code></pre>
+					</section>
 				</section>
 				
 				<section>
@@ -120,7 +126,7 @@ MessageHub.Hub.Subscribe&lt;BadgeCompletedEvent&gt;(e =&gt;
 					<section>
 						<h3>PubSub to the rescue!</h3>
 						<pre><code data-trim class="csharp">
-//push notification manager manager
+//push notification manager
 MessageHub.Hub.Subscribe&lt;BadgeCompletedEvent&gt;(e =&gt;
 {
     applePush.NewNotification(/* ... */).Send();
@@ -130,7 +136,20 @@ MessageHub.Hub.Subscribe&lt;BadgeCompletedEvent&gt;(e =&gt;
 						<p>Adding this does not require touching the core processing framework, AT ALL</p>
 					</section>
 				</section>
-
+				
+				<section>
+					<section>
+						<h2>Decoupled, but Not Really</h2>
+					
+						<p>This is a great way to decouple these two tools.</p>
+						<p>But how do we actually register the PushNotificationManager to listen for events?</p>
+						<p>It ruins the "not touching core code" if we have to manually call all of these different RegisterForEvents methods<p>
+					</section>
+					<section>
+						<h2>Custom Attributes to the Rescue!</h2>
+						
+					</section>
+				</section>
 				
 				<section>
 					<h2>Questions?</h2>
