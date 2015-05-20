@@ -116,16 +116,18 @@ MessageHub.Hub.Subscribe&lt;BadgeCompletedEvent&gt;(e =&gt;
 						<li>"We <b>NEED</b> push notifications. That's the big advantage"
 					</ol>
 					
-					<h3>PubSub to the rescue!</h3>
-					<pre><code data-trim class="csharp">
+					<section>
+						<h3>PubSub to the rescue!</h3>
+						<pre><code data-trim class="csharp">
 //push notification manager manager
 MessageHub.Hub.Subscribe&lt;BadgeCompletedEvent&gt;(e =&gt;
 {
     applePush.NewNotification(/* ... */).Send();
     androidPush.NewNotification(/* ... */).Send();
 });
-					</code></pre>
-					<p>Adding this does not require touching the core processing framework, AT ALL</p>
+						</code></pre>
+						<p>Adding this does not require touching the core processing framework, AT ALL</p>
+					</section>
 				</section>
 
 				
