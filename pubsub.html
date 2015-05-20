@@ -77,14 +77,55 @@
 				</section>
 				
 				<section>
-					<h2>Doomsday Scenario</h2>
+					<h2>As PubSub</h2>
+					<p>Complete badge:</p>
+					<pre><code data-trim class="csharp">
+					//user completes step
+					MessageHub.Hub.Publish(new BadgeCompletedEvent
+		            {
+		                Step = completedStep,
+		                User = user
+		            });
+					</code></pre>
 					
+					<p>Handle it!</p>
+					<pre><code data-trim class="csharp">
+					//email manager
+					MessageHub.Hub.Subscribe&lt;BadgeCompletedEvent&gt;(e =&gt;
+		            {
+		                Email.send(e.User.Mentor, string.Format("{0} completed {1}", e.User.Name, e.Step.Name));
+		            });
+					</code></pre>
+					<pre><code data-trim class="csharp">
+					//notification manager
+					MessageHub.Hub.Subscribe&lt;BadgeCompletedEvent&gt;(e =&gt;
+		            {
+		                db.Notifications.Add(new Notification(e.User.Mentor, e.User, e.Step));
+		            });
+					</code></pre>
+				</section>
+				
+				<section>
+					<h2>Doomsday Scenario</h2>
+					<p>This is great and all, but right now all it gets us is a lot of work rewriting our existing system.</p>
+					<p>What if...</p>
 					<ol>
 						<li>Dan, Chris and Chris quit</li>
-						<li>Marty decides he wants a native iOS app</li>
-						<li>"We <b>NEED</b> push notifications"</li>
-						<li>How do we hook into existing workflow above?<li>
+						<li>Marty's ideas run wild</li>
+						<li>LEM gets native iOS and Android apps</li>
+						<li>"We <b>NEED</b> push notifications. That's the big advantage"
 					</ol>
+					
+					<h3>PubSub to the rescue!</h3>
+					<pre><code data-trim class="csharp">
+					//push notification manager manager
+					MessageHub.Hub.Subscribe&lt;BadgeCompletedEvent&gt;(e =&gt;
+		            {
+		                applePush.NewNotification(/* ... */).Send();
+		                androidPush.NewNotification(/* ... */).Send();
+		            });
+					</code></pre>
+					<p>Adding this does not require touching the core processing framework, AT ALL</p>
 				</section>
 
 				
